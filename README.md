@@ -6,6 +6,8 @@ The project investigates what content trends, how category preferences vary by m
 
 > **Dataset note:** This is historical trending-list data, not a live view of YouTube or a representative measure of the entire YouTube audience. A trending appearance is a record of a video appearing in a country's trending list on a particular date.
 
+> Link: https://www.kaggle.com/datasets/rsrishav/youtube-trending-video-dataset
+
 ---
 
 ## Dashboard
