@@ -1,0 +1,185 @@
+{
+  "name": "YouTube Market Intelligence",
+  "dataColors": [
+    "#FF0000", "#0F0F0F", "#3EA6FF", "#606060",
+    "#FF6B6B", "#FFB020", "#2BA640", "#AAAAAA",
+    "#CC0000", "#1F6FB5", "#FF9E9E", "#303030",
+    "#8E24AA", "#00A3A3", "#FFD27A", "#7A0000",
+    "#7FC4FF", "#8C8C8C", "#E65100", "#5E35B1",
+    "#FFC9C9", "#0B4F8A", "#1B7F32", "#D0D0D0",
+    "#B3261E", "#4DB6AC", "#F4511E", "#3C3C3C",
+    "#B39DDB", "#F28B82", "#9E9E9E", "#212121"
+  ],
+  "background": "#FFFFFF",
+  "foreground": "#0F0F0F",
+  "tableAccent": "#FF0000",
+  "good": "#2BA640",
+  "bad": "#B00020",
+  "neutral": "#FFB020",
+  "maximum": "#CC0000",
+  "center": "#FF8A80",
+  "minimum": "#FFF1F0",
+  "null": "#E5E5E5",
+  "textClasses": {
+    "callout": { "fontFace": "Segoe UI Semibold", "color": "#CC0000", "fontSize": 30 },
+    "title": { "fontFace": "Segoe UI Semibold", "color": "#0F0F0F", "fontSize": 14 },
+    "header": { "fontFace": "Segoe UI Semibold", "color": "#0F0F0F", "fontSize": 12 },
+    "label": { "fontFace": "Segoe UI", "color": "#606060", "fontSize": 10 }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [{ "show": true, "color": { "solid": { "color": "#FFFFFF" } }, "transparency": 0 }],
+        "border": [{ "show": true, "color": { "solid": { "color": "#E5E5E5" } }, "radius": 12 }],
+        "dropShadow": [{ "show": false }],
+        "visualHeader": [{ "show": false }],
+        "title": [{
+          "show": true,
+          "fontColor": { "solid": { "color": "#0F0F0F" } },
+          "fontSize": 14,
+          "fontFamily": "Segoe UI Semibold",
+          "alignment": "left"
+        }],
+        "subTitle": [{
+          "fontColor": { "solid": { "color": "#606060" } },
+          "fontSize": 10
+        }],
+        "divider": [{
+          "show": true,
+          "color": { "solid": { "color": "#FF0000" } }
+        }],
+        "legend": [{
+          "show": true,
+          "position": "Top",
+          "labelColor": { "solid": { "color": "#606060" } },
+          "fontSize": 10
+        }],
+        "categoryAxis": [{
+          "show": true,
+          "labelColor": { "solid": { "color": "#606060" } },
+          "fontSize": 10,
+          "showAxisTitle": false,
+          "gridlineShow": false,
+          "lineColor": { "solid": { "color": "#E5E5E5" } }
+        }],
+        "valueAxis": [{
+          "show": true,
+          "labelColor": { "solid": { "color": "#606060" } },
+          "fontSize": 10,
+          "showAxisTitle": false,
+          "gridlineShow": true,
+          "gridlineColor": { "solid": { "color": "#F1F1F1" } },
+          "gridlineThickness": 1
+        }],
+        "labels": [{
+          "color": { "solid": { "color": "#0F0F0F" } },
+          "fontSize": 10
+        }]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [{ "color": { "solid": { "color": "#F9F9F9" } }, "transparency": 0 }],
+        "outspace": [{ "color": { "solid": { "color": "#F9F9F9" } }, "transparency": 0 }]
+      }
+    },
+    "card": {
+      "*": {
+        "labels": [{
+          "color": { "solid": { "color": "#CC0000" } },
+          "fontSize": 30,
+          "fontFamily": "Segoe UI Semibold"
+        }],
+        "categoryLabels": [{
+          "show": true,
+          "color": { "solid": { "color": "#606060" } },
+          "fontSize": 11
+        }]
+      }
+    },
+    "multiRowCard": {
+      "*": {
+        "dataLabels": [{ "color": { "solid": { "color": "#CC0000" } }, "fontSize": 20 }],
+        "cardTitle": [{ "color": { "solid": { "color": "#606060" } }, "fontSize": 11 }]
+      }
+    },
+    "kpi": {
+      "*": {
+        "indicator": [{ "fontSize": 30 }],
+        "trendline": [{ "show": true, "transparency": 20 }]
+      }
+    },
+    "slicer": {
+      "*": {
+        "header": [{
+          "show": true,
+          "fontColor": { "solid": { "color": "#0F0F0F" } },
+          "fontSize": 12
+        }],
+        "items": [{
+          "fontColor": { "solid": { "color": "#0F0F0F" } },
+          "background": { "solid": { "color": "#F2F2F2" } },
+          "fontSize": 11
+        }]
+      }
+    },
+    "tableEx": {
+      "*": {
+        "columnHeaders": [{
+          "fontColor": { "solid": { "color": "#FFFFFF" } },
+          "backColor": { "solid": { "color": "#0F0F0F" } },
+          "fontSize": 11,
+          "fontFamily": "Segoe UI Semibold"
+        }],
+        "values": [{
+          "fontColorPrimary": { "solid": { "color": "#0F0F0F" } },
+          "backColorPrimary": { "solid": { "color": "#FFFFFF" } },
+          "fontColorSecondary": { "solid": { "color": "#0F0F0F" } },
+          "backColorSecondary": { "solid": { "color": "#F9F9F9" } },
+          "fontSize": 10
+        }],
+        "grid": [{
+          "gridHorizontal": true,
+          "gridHorizontalColor": { "solid": { "color": "#EDEDED" } },
+          "gridVertical": false
+        }]
+      }
+    },
+    "pivotTable": {
+      "*": {
+        "columnHeaders": [{
+          "fontColor": { "solid": { "color": "#FFFFFF" } },
+          "backColor": { "solid": { "color": "#0F0F0F" } },
+          "fontSize": 11
+        }],
+        "rowHeaders": [{
+          "fontColor": { "solid": { "color": "#0F0F0F" } },
+          "fontSize": 10
+        }],
+        "values": [{
+          "fontColorPrimary": { "solid": { "color": "#0F0F0F" } },
+          "backColorPrimary": { "solid": { "color": "#FFFFFF" } },
+          "fontColorSecondary": { "solid": { "color": "#0F0F0F" } },
+          "backColorSecondary": { "solid": { "color": "#F9F9F9" } }
+        }]
+      }
+    },
+    "lineChart": {
+      "*": {
+        "lineStyles": [{ "strokeWidth": 3, "showMarker": false }],
+        "smoothing": [{ "show": true }]
+      }
+    },
+    "columnChart": { "*": { "layout": [{ "columnWidth": 55 }] } },
+    "clusteredColumnChart": { "*": { "layout": [{ "columnWidth": 55 }] } },
+    "barChart": { "*": { "layout": [{ "categoryPadding": 35 }] } },
+    "clusteredBarChart": { "*": { "layout": [{ "categoryPadding": 35 }] } },
+    "donutChart": { "*": { "slices": [{ "innerRadiusRatio": 65 }] } },
+    "gauge": {
+      "*": {
+        "calloutValue": [{ "color": { "solid": { "color": "#CC0000" } }, "fontSize": 24 }],
+        "target": [{ "color": { "solid": { "color": "#0F0F0F" } } }]
+      }
+    }
+  }
+}
