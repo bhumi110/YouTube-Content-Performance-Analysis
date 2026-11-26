@@ -21,7 +21,7 @@ Compares recorded views and engagement across countries, identifies video outlie
 ### 3. Content Strategy Insights
 Explores global versus local content, category engagement, market quality, category mix over time, and monthly growth.
 
-*Dashboard screenshots can be added to the repository under `assets/` and embedded here.*
+
 
 ---
 
@@ -80,56 +80,29 @@ Category reference JSON files map numeric `categoryId` values to readable catego
 
 ## SQL Workflow
 
-The examples below show the core SQL patterns used in the project. Adjust column names if they differ in your imported tables.
-
 ### 1. Combine country datasets
 
 Use `UNION ALL` to preserve all trending records. Include the country code as a column.
 
 ```sql
-SELECT 'CA' AS country, *
-INTO dbo.youtube_trending
-FROM dbo.CA_youtube_trending_data
-
+SELECT 'CA' AS country, * INTO dbo.youtube_trending_data FROM dbo.CA_youtube_trending_data
 UNION ALL
-
-SELECT 'GB' AS country, *
-FROM dbo.GB_youtube_trending_data
-
+SELECT 'GB' AS country, * FROM dbo.GB_youtube_trending_data
 UNION ALL
-
-SELECT 'IN' AS country, *
-FROM dbo.IN_youtube_trending_data
-
+SELECT 'IN' AS country, * FROM dbo.IN_youtube_trending_data
 UNION ALL
-
-SELECT 'JP' AS country, *
-FROM dbo.JP_youtube_trending_data
-
+SELECT 'JP' AS country, * FROM dbo.JP_youtube_trending_data
 UNION ALL
-
-SELECT 'US' AS country, *
-FROM dbo.US_youtube_trending_data;
+SELECT 'US' AS country, * FROM dbo.US_youtube_trending_data;
 ```
 
 **Why `UNION ALL`?** Each row represents a trending record. Repeated appearances across dates and countries are meaningful, so the consolidation should not silently remove them.
 
-> If the main table already exists, use `INSERT INTO` with an explicit column list. Avoid `SELECT *` when the source and destination tables have different columns.
 
-### 2. Create the category lookup table
-
-```sql
-CREATE TABLE dbo.youtube_categories (
-    categoryId INT PRIMARY KEY,
-    category_name VARCHAR(100)
-);
-```
-
-After importing the Python-generated category CSV into this table, add a category name column to the main table if it does not already exist:
+After importing the Python-generated category CSV into this table, add a category name column to the main table:
 
 ```sql
-ALTER TABLE dbo.youtube_trending
-ADD category_name VARCHAR(100);
+ALTER TABLE dbo.youtube_trending_data ADD category_name VARCHAR(100);
 ```
 
 Populate the category names:
@@ -137,120 +110,22 @@ Populate the category names:
 ```sql
 UPDATE yt
 SET yt.category_name = yc.category_name
-FROM dbo.youtube_trending AS yt
-JOIN dbo.youtube_categories AS yc
+FROM dbo.youtube_trending_data AS yt
+INNER JOIN dbo.youtube_categories AS yc
     ON yt.categoryId = yc.categoryId;
 ```
 
 ### 3. Calculate engagement rates
 
 ```sql
-ALTER TABLE dbo.youtube_trending
-ADD
-    like_rate AS
-        ROUND(
-            CAST(likes AS FLOAT) / NULLIF(view_count, 0) * 100,
-            2
-        ),
-
-    comment_rate AS
-        ROUND(
-            CAST(comment_count AS FLOAT) / NULLIF(view_count, 0) * 100,
-            2
-        ),
-
-    engagement_rate AS
-        ROUND(
-            (
-                CAST(likes AS FLOAT) +
-                CAST(comment_count AS FLOAT)
-            ) / NULLIF(view_count, 0) * 100,
-            2
-        );
+ALTER TABLE dbo.youtube_trending_data
+ADD 
+    like_rate AS ROUND((CAST(likes AS FLOAT) / NULLIF(view_count, 0)) * 100, 2),
+    comment_rate AS ROUND((CAST(comment_count AS FLOAT) / NULLIF(view_count, 0)) * 100, 2),
+    engagement_rate AS ROUND((CAST(CAST(comment_count AS BIGINT) + CAST(likes AS BIGINT) AS FLOAT) / NULLIF(view_count, 0)) * 100, 2);
 ```
 
 `NULLIF(view_count, 0)` prevents division by zero. These formulas use likes and comments as recorded in the dataset; dislikes are not included in the engagement rate.
-
-### 4. Trending appearances by country
-
-```sql
-SELECT
-    country,
-    COUNT(*) AS trending_appearances
-FROM dbo.youtube_trending
-GROUP BY country
-ORDER BY trending_appearances DESC;
-```
-
-### 5. Category share of trending appearances
-
-```sql
-SELECT
-    category_name,
-    COUNT(*) AS trending_appearances,
-    100.0 * COUNT(*) /
-        SUM(COUNT(*)) OVER () AS appearance_share_pct
-FROM dbo.youtube_trending
-GROUP BY category_name
-ORDER BY trending_appearances DESC;
-```
-
-### 6. Engagement by category
-
-```sql
-SELECT
-    category_name,
-    AVG(engagement_rate) AS avg_engagement_rate,
-    AVG(view_count) AS avg_recorded_views
-FROM dbo.youtube_trending
-GROUP BY category_name
-ORDER BY avg_engagement_rate DESC;
-```
-
-### 7. Videos appearing in multiple countries
-
-```sql
-WITH video_market_count AS (
-    SELECT
-        video_id,
-        COUNT(DISTINCT country) AS countries_count
-    FROM dbo.youtube_trending
-    GROUP BY video_id
-)
-SELECT
-    countries_count,
-    COUNT(*) AS unique_videos
-FROM video_market_count
-GROUP BY countries_count
-ORDER BY countries_count;
-```
-
-### 8. Top channels by trending appearances
-
-```sql
-SELECT TOP 10
-    channelTitle,
-    COUNT(*) AS trending_appearances
-FROM dbo.youtube_trending
-GROUP BY channelTitle
-ORDER BY trending_appearances DESC;
-```
-
-### 9. Monthly trending activity
-
-```sql
-SELECT
-    YEAR(trending_date) AS trend_year,
-    MONTH(trending_date) AS trend_month,
-    COUNT(*) AS trending_appearances
-FROM dbo.youtube_trending
-GROUP BY
-    YEAR(trending_date),
-    MONTH(trending_date)
-ORDER BY
-    trend_year,
-    trend_month;
-```
 
 ---
 
@@ -268,45 +143,35 @@ ORDER BY
 | Global Videos (%) | Unique videos appearing in 2 or more countries / all unique videos × 100 |
 | Top 10 Channel Share (%) | Top 10 channel appearances / all trending appearances × 100 |
 | Month-over-Month Growth (%) | `(current month appearances − previous month appearances) / previous month appearances × 100` |
-| Time to Trend | First trending date − publication date |
+
 
 ### Power BI measure examples
 
 ```DAX
-Trending Appearances =
-COUNTROWS(youtube_trending)
+Trending Appearances = 
+COUNTROWS(YouTubeTrendingData)
 ```
 
 ```DAX
-Unique Trending Videos =
-DISTINCTCOUNT(youtube_trending[video_id])
+Unique Video Apperances = DISTINCTCOUNT(YouTubeTrendingData[video_id])
 ```
 
 ```DAX
-Trending Channels =
-DISTINCTCOUNT(youtube_trending[channelId])
+Total Channels = DISTINCTCOUNT(YouTubeTrendingData[channel_id])
 ```
 
 ```DAX
-Global Videos % =
-DIVIDE(
-    CALCULATE(
-        DISTINCTCOUNT(youtube_trending[video_id]),
-        youtube_trending[Countries per Video] >= 2
-    ),
-    DISTINCTCOUNT(youtube_trending[video_id])
-)
+Global Videos % = 
+DIVIDE ( [Videos in Multiple Countries], DISTINCTCOUNT ( YouTubeTrendingData[video_id] ) )
 ```
 
-For the `Countries per Video` field, use a **calculated column** (not a measure) so it can be used as a chart axis:
-
 ```DAX
-Countries per Video =
+Countries_per_Video = 
 CALCULATE(
-    DISTINCTCOUNT(youtube_trending[country]),
+    DISTINCTCOUNT(YouTubeTrendingData[country]),
     ALLEXCEPT(
-        youtube_trending,
-        youtube_trending[video_id]
+        YouTubeTrendingData,
+        YouTubeTrendingData[video_id]
     )
 )
 ```
